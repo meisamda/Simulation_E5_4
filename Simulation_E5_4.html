@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Simulation_E5</title>
+        <style>
+            canvas{
+                margin-left:15%;
+            }
+            @font-face {
+                font-family: iransans_regular;
+                src: url(iransans_regular.ttf);
+            }
+            body{
+                font-family: iransans_regular;
+            }
+            div.main{
+                height:120px;
+                width:35%;                
+                border:0px solid red;
+                margin:0 auto;                
+            }
+            div.main div.inner1{
+                height:50%;
+                width:100%;               
+                border:0px solid yellow;
+                margin:0 auto;
+            }
+            div.main div.inner2{
+                height:50%;
+                width:100%;
+                border:0px solid green;
+                margin:0 auto;
+            }
+            div.inner1-in1{
+                height:100%;
+                width:70%;
+                float: left;
+                text-align:center;
+            }
+            div.inner1-in2{
+                height:100%;
+                width:30%;
+                float: left;
+            }
+            div.inner2-in1{
+                height:100%;
+                width:69%;
+                float: left;
+            }
+            div.inner2-in2{
+                height:100%;
+                width:31%;
+                float: left;
+            }
+            button{
+                float:right;
+                margin-right:38px;
+                height:60px;
+                width:90px;
+                color:white;
+                border:0px;   
+                font-weight:bold;
+                font-size:18px;
+                border-radius: 10px;
+                outline:none;
+                background: linear-gradient(30deg,rgba(183,222,237,1) ,#0FB2EE 25%, #0EAAEC 45%, rgba(183,222,237,1) 100%);
+            }            
+            button:hover{
+                background: linear-gradient(30deg,rgb(153, 226, 255) ,rgb(220, 246, 255) 25%, rgb(89, 205, 255) 45%, rgb(0, 140, 195) 100%);
+            }
+            input , .cinput{
+                margin-top:10px;    
+                background-color:white;
+                border:1px solid grey;                
+                height:30px;
+                width:160px;
+                float:right;                    
+                font-size:25px;
+                color:rgb(1, 151, 206);
+                border-radius:6px;
+                outline:none;
+                font-family: iransans_regular;
+            }
+            input:focus{
+                background-color:rgb(245, 238, 238);
+            } 
+            input::placeholder{
+                font-size:15px;
+                font-family: iransans_regular;
+            }
+            .winput{
+                border:1.1px solid red;   
+                background-color: #FAFF93;
+                transition: background-color 2s , border 1s;
+            }
+            table ,td{
+                border-collapse: collapse;
+                text-align:center;
+            }
+            th,td{
+                padding-top:3px;
+            }
+            table{
+                width:60%;
+                margin:auto;                
+            }
+            caption{
+                color:#251AB0;
+                font:25px  iransans_regular; 
+                margin-top:10px;
+                margin-bottom:10px;
+                border: 1px solid  rgb(190, 189, 189);
+                border-radius:10px; 
+            }
+            tr:nth-child(n+2){
+                border-bottom:2px solid rgb(190, 189, 189);
+            }            
+            tr:nth-child(2n+2) {
+                background:#F3F3F3;    
+            }
+            tr:nth-child(2n+3) {
+                background:rgb(224, 222, 222);
+            }
+            tr:nth-child(n+2):hover {
+                background:rgb(7, 0, 0);
+                color:white;  
+            }     
+            
+            th:first-child{
+                border-top-left-radius:20px;
+            }            
+            th:nth-child(6){
+                border-top-right-radius:20px;
+            }
+            th{
+                background-color:rgb(153, 226, 255);
+            }
+            tr:last-child td:nth-child(1){
+                border-width:0px 1px 0px 1px;                
+                border-color: rgb(167, 163, 163);
+                color:red;
+            }
+            tr:last-child{
+                border:0;
+                background-color:rgb(153, 226, 255);
+            }
+            tr:nth-last-child(2){
+                border-bottom:1px solid black;
+                
+            }
+            tr:last-child td:first-child{
+                border-bottom-left-radius:10px;                
+            }
+            tr:last-child td:last-child{
+                border-bottom-right-radius:10px;                
+            }
+
+            #talkbubbleleft  {
+                  
+                margin-left:15px;
+                color:white;
+                direction: rtl;
+                margin-top:5px;             
+                width: 150px;
+                height: 32px;
+                background: black;
+                position: relative;
+                border-radius: 10px;
+                opacity:0;                
+                text-align: center;
+            }
+            
+            #talkbubbleleft:before {                    
+                content: "";
+                position: absolute;
+                right: 98.5%;
+                top: 3px;
+                width: 0;
+                height: 0;
+                border-top: 13px solid transparent;
+                border-right: 13px solid black;
+                border-bottom: 13px solid transparent;
+            }
+
+            @keyframes example {
+                0%   {opacity:0;}                
+                50%   {opacity:1;}                
+                100% {opacity:0;}
+            }
+        </style>    
+    </head>
+    <body>            
+        <canvas id="cvs" width="850px"  height="600px" style="border:1px solid rgb(199, 196, 196)" onmousemove="showCoords(event)" onmouseout="clearCoor()"></canvas>
+        <div class="main">
+            <div class="inner1">
+                <div class="inner1-in1">
+                    <button onclick="f1()">Boom!!!</button>            
+                </div>
+                <div class="inner1-in2">   
+                    <p id="Coord"></p>            
+                </div>
+            </div>
+            <div class="inner2">
+                <div class="inner2-in1">    
+                    <input type="text" id="userInput" placeholder="تعداد بمب ها را وارد کنید" required>            
+                </div>
+                <div class="inner2-in2"> 
+                    <div id="talkbubbleleft">عدد صحیح نیست.</div>               
+                </div>
+            </div>
+        </div>
+        
+        <table id ="table1">
+            <caption>شبیه سازی مثال بمباران </caption>
+            <tr>
+                <th>نتیجه الف</th>
+                <th>300*RNNy</th>
+                <th>RNNy</th>
+                <th>600*RNNx</th>
+                <th>RNNx</th>
+                <th>بمب افکن</th>
+            </tr>
+        </table>
+        <script>  
+            drawtabledashed();  // تابع جدول نقطه چین
+            drawshape();        // تابع شکل نامنتظم
+        
+            // ================ شروع تابع نمایش و مخفی کردن مختصات ================
+            function showCoords(event) {
+                var x = event.offsetX - 400 ;
+                var y = event.offsetY - 300 ;
+                var coor = "X coords: " + x*4 + "<br>Y coords: " + -y*4;
+                document.getElementById("Coord").innerHTML = coor;
+            }
+
+            function clearCoor() {
+                document.getElementById("Coord").innerHTML = "";
+            } 
+            // ================ پایان تابع نمایش و مخفی کردن مختصات ================
+
+            // ======================= شروع تابع اصلی با کلیک =======================
+            function f1() { 
+                var val = [""], u = [""], v = [""], s = [""], mul = [""];   
+                var rd_hor =[""];
+                var rd_ver =[""]; 
+                var m_hor =[""];
+                var m_ver =[""]; 
+                var esabat =[""];
+                var esabat_all = 0 ;
+                var body_table = "";
+                var all_table = "";
+                var index = 0;
+
+                var value = document.getElementById('userInput').value;
+                if((!value) | isNaN(value) | value == 0 | value < 0){
+                    document.getElementById('userInput').className ="winput"; 
+                    document.getElementById("talkbubbleleft").style.animation = "example 3s infinite";
+                }
+                else{
+                    document.getElementById("talkbubbleleft").style.animation = "";
+                    document.getElementById('userInput').className ="cinput"; 
+                }
+                
+                for (i = 1; i <= value; i++){
+                    //================= شروع تابع تولید اعداد تصادفی ستون افقی =================
+                    function normalRandom_hor(i){              
+                        do
+                        {
+                            u[i] = Math.random()*2-1;
+                            v[i] = Math.random()*2-1;
+                            s[i] = u[i]*u[i]+v[i]*v[i];
+                        } while(s[i] === 0 || s[i] >= 1);
+                        mul[i] = Math.sqrt(-2 * Math.log(s[i]) / s[i]);
+                        val[i] = u[i] * mul[i];
+
+                        return val[i].toFixed(2);
+                    }
+                    //================= پایان تابع تولید اعداد تصادفی ستون افقی =================
+                    //================= شروع تابع تولید اعداد تصادفی ستون عمودی =================
+                    function normalRandom_ver(i){              
+                        do
+                        {
+                            u[i] = Math.random()*2-1;
+                            v[i] = Math.random()*2-1;
+                            s[i] = u[i]*u[i]+v[i]*v[i];
+                        } while(s[i] === 0 || s[i] >= 1);
+                        mul[i] = Math.sqrt(-2 * Math.log(s[i]) / s[i]);
+                        val[i] = u[i] * mul[i];
+                        return val[i].toFixed(2);
+                    }
+                    //================= پایان تابع تولید اعداد تصادفی ستون عمودی =================
+                    // ===================== شروع تابع دایره ها و نوشته زیرش ======================
+                    function circle_text(color){
+                        //var text = "* NO: " + i + " [" + m_hor[i] + " * " + m_ver[i] + "]";
+                        var c=document.getElementById("cvs");
+                        var ctx=c.getContext("2d");                        
+                        ctx.beginPath();                         
+                        ctx.fillStyle = color;
+                        ctx.arc(400 + m_hor[i]/4, 300 - m_ver[i]/4, 4, 0, 2 * Math.PI);
+                        ctx.font='20px iransans_regular';
+                        ctx.fill()
+                        ctx.beginPath();
+                        ctx.fillStyle = "black";
+                        ctx.fillText(i, 400-5 + m_hor[i]/4, 325 - m_ver[i]/4);
+                        ctx.fill();// tasir dadane fillstyle()                    
+                        //ctx.fillText(text, 400-3 + m_hor[i]/4, 300+8 - m_ver[i]/4);
+                        //ctx.stroke();  // tasir dadane strokestyle()
+                    }
+                    // ===================== پایان تابع دایره ها و نوشته زیرش ======================
+
+                    rd_hor[i] = normalRandom_hor(i);
+                    rd_ver[i] = normalRandom_ver(i);
+                    m_hor[i]=Math.floor(600 * rd_hor[i]);
+                    m_ver[i]=Math.floor(300 * rd_ver[i]);
+                    esabat[i] = "خیر";
+                    circle_text("black");                   
+                    
+                    // ================== مستطیل بالا ===================
+                    if(m_hor[i]>=0 & m_hor[i] <=300 &  m_ver[i]>=0 & m_ver[i]<=500 ){                       
+                        esabat[i] = "بله";
+                        esabat_all++;
+                        circle_text("red");
+                    }
+                    // ================== مستطیل پایین ===================
+                    if(m_hor[i]>=0 & m_hor[i] <=300 & m_ver[i]<=0 & m_ver[i]>=-400){   
+                        esabat[i] = "بله";
+                        esabat_all++;
+                        circle_text("green");               
+                    }                   
+                    // ================== مثلث راست  ===================     
+                    for(j = 0 ; j<=450 ; j=j+1){
+                        if(m_hor[i]>=300 & m_hor[i] <=750-j & m_ver[i]==250-j){
+                            esabat[i] = "بله";
+                            esabat_all++;
+                            circle_text("blue");
+                        }
+                    }
+                    // ================== مثلث چپ بالا  ===================     
+                    for(m = 0 ; m<=500 ; m++){                                                    
+                        if(m_hor[i]<=0 & m_hor[i]>=-500+m & m_ver[i]==m){
+                            esabat[i] = "بله";
+                            esabat_all++;
+                            circle_text("pink");                            
+                        }
+                    }
+                    // ================== مستطیل پایین   ===================     
+                    if(m_hor[i]<=0 & m_hor[i] >=-200 & m_ver[i]<=0 & m_ver[i]>=-400){   
+                        esabat[i] = "بله";
+                        esabat_all++;
+                        circle_text("orange");                
+                    }
+                    // ================== مثلث چپ پایین  ===================     
+                    for(m = 0 ; m<=300 ; m++){                                                    
+                        if(m_hor[i]<=-200 & m_hor[i]>-500+m & m_ver[i]==-m){
+                            esabat[i] = "بله";
+                            esabat_all++;
+                            circle_text("violet");                            
+                        }
+                    }
+
+                    //=================== شروع چاپ جدول =====================
+                    var header_table = "<caption>شبیه سازی مثال بمباران</caption><tr><th>نتیجه الف</th><th>300*RNNy</th><th>RNNy</th><th>600*RNNx</th><th>RNNx</th><th>بمب افکن</th></tr>";
+                    var row_col_table;
+                    var footer_table;
+                    row_col_table = "<tr><td>"
+                    + esabat[i]  + "</td><td>"
+                    + m_ver[i]  + "</td><td>"
+                    + rd_ver[i]  + "</td><td>"
+                    + m_hor[i]  + "</td><td>"
+                    + rd_hor[i]  + "</td><td>"
+                    + i  + "</td></tr>";
+                    
+                    body_table = body_table + row_col_table ;                    
+                    footer_table ="<tr><td >" + esabat_all +"</td><td colspan='4'></td><td >مجموع</td></tr>";
+                    all_table= header_table + body_table + footer_table;
+                    document.getElementById("table1").innerHTML = all_table; 
+                    //=================== پایان چاپ جدول =====================                   
+                }
+            }
+            // ======================= پایان تابع اصلی با کلیک =======================
+            
+            //====================== شروع تابع تشکیل شکل نا منتظم ====================
+            function drawshape(){
+                var nc=document.getElementById("cvs");
+                var ctx=nc.getContext("2d");
+                ctx.beginPath();
+                ctx.setLineDash([0, 0]);
+                ctx.moveTo(275,300);
+                ctx.lineTo(350,375);
+                ctx.lineTo(350,400);
+                ctx.lineTo(475,400);
+                ctx.lineTo(475,350);
+                ctx.lineTo(587.5,237.5);
+                ctx.lineTo(475,237.5);
+                ctx.lineTo(475,175);
+                ctx.lineTo(400,175);
+                ctx.lineTo(275,300);
+                ctx.stroke();
+            }
+            //====================== پایان تابع تشکیل شکل نا منتظم ====================
+            
+            //====================== شروع تابع تشکیل جدول نقطه چین ====================
+            function drawtabledashed(){
+                var nc=document.getElementById("cvs");
+                var ctx=nc.getContext("2d");
+                ctx.beginPath();
+                ctx.strokeStyle= "black";            
+                ctx.setLineDash([0, 0]);
+
+                // vertical left black
+                ctx.moveTo(50,550);
+                ctx.lineTo(50,50);  
+
+                // vertical center black
+                ctx.moveTo(400,550);
+                ctx.lineTo(400,50); 
+                // vertical right black
+                ctx.moveTo(800,550);
+                ctx.lineTo(800,50); 
+
+                // Horizontal bottom black
+                ctx.moveTo(50,550);
+                ctx.lineTo(800,550);
+
+                // Horizontal center black
+                ctx.moveTo(50,300);
+                ctx.lineTo(800,300);
+                ctx.stroke();
+                
+                //============ نقطه چین ها ==============
+                ctx.beginPath();
+                ctx.setLineDash([2, 3]);            
+                // Vertical Dashed
+                for(i=75 ; i<800;i+=25){                
+                    ctx.moveTo(i,550);
+                    ctx.lineTo(i,50);                
+                }
+                // Horizontal Dashed
+                for(i=50 ; i<550;i+=25){
+                    ctx.moveTo(50,i);
+                    ctx.lineTo(800,i);
+                }
+                ctx.stroke();
+
+                //============= حروف افقی ================
+                ctx.beginPath();
+                ctx.strokeStyle= "black";  
+                ctx.font = "15px Arial";
+                ctx.fillStyle = "red";
+                var hor_num = -1400;
+                for(i=33; i<800 ; i+=50){
+                    ctx.fillText(hor_num, i, 570);
+                    hor_num+=200;
+                    if(hor_num==0){                    
+                        i=i+13;
+                    }
+                    if(hor_num>0){                    
+                        i=i-2;
+                    }
+                }
+
+                //============== حروف عمودی ================
+                var ver_num = -1000;
+                var hr = 10; 
+                for(i=555; i>=50 ; i-=50){
+                    ctx.fillText(ver_num, hr, i);
+                    ver_num+=200;
+                    if(ver_num==0){                    
+                        hr+=15;
+                    }
+                    if(ver_num==200){                    
+                        hr-=10;
+                    }
+                    if(ver_num==1000){                    
+                        hr-=5;
+                    }
+                }    
+                ctx.stroke();
+            }
+            //====================== پایان تابع تشکیل جدول نقطه چین ====================            
+        </script>        
+    </body>
+</html>
